@@ -1,0 +1,58 @@
+.content table{
+    margin-left: 20px;
+    margin-top: 15px;
+    width: 45vw;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+
+}
+.delete{
+    width: 7%;
+}
+.content td{
+    border:1px solid black;
+    border-bottom: none;
+    border-right: none;
+}
+.content th{
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    padding: 5px;
+}
+
+.content{
+    display: flex;
+}
+.contentleft{
+    flex: 1;
+    height: 87vh;
+    border-right: 1px solid black;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+button:hover{
+    scale: 1.1;
+}
+.contentleft button:hover{
+    scale: 1.01;
+}
+.contentright{
+    flex: 1;
+}
+.contentleft button{
+    background-color: #6a65fe;
+    width: 70%;
+}
+#categoryName{
+    width: 30vw;
+}
+#taxCategory{
+    width: 35.8vw;
+}
+#saveCategory{
+    width: 38.5vw;
+}

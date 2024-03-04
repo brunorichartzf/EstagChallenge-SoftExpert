@@ -1,0 +1,51 @@
+.content table{
+   width: 45vw
+
+}
+.delete{
+    width: 5%;
+}
+.history{
+    margin-left: 20px;
+    margin-top: 5px;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+.details{
+    margin-left: 20px;
+    margin-top: 15px;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+}
+.content td{
+    border:1px solid black;
+    border-bottom: none;
+    border-right: none;
+}
+.content th{
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    padding: 5px;
+}
+.content{
+    display: flex;
+}
+.contentleft{
+    flex: 1;
+    height: 87vh;
+    border-right: 1px solid black;
+    margin-top: 15px;
+}
+.contentright{
+    flex: 1;
+}
+button:hover{
+    scale: 1.1;
+}

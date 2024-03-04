@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Produto</title>
+    <link rel="stylesheet" href="Styles/header.css">
+    <link rel="stylesheet" href="Styles/cadProduto.css">
+    <script src="Scripts/cadProduto.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Products</h1>
+        </div>
+        <div class="headerItems">
+            <a href="home.html"><button>Home</button></a>
+            <a href="cadProduto.html"><button>Products</button></a>
+            <a href="cadCategoria.html"><button>Categories</button></a>
+            <a href="history.html"><button>History</button></a>
+    </div>
+        </div>
+        </div>
+
+    <div class="content">
+    <div class="pageleft">
+        <div class="form">
+            <form id="productForm">
+                <label for="productName">Product Name: </label>
+                <input type="text" name="productName" id="productName" class="product" placeholder="Product Name" required>
+                <br>
+                <label for="amount">Amount: </label>
+                <input type="number" min="1" name="amountProduct" id="amountProduct" class="product" placeholder="Amount" required>
+                <br>
+                <label for="unitPrice">Unit Price</label>
+                <input type="number" min="0.01" step="0.01" name="unitPriceProduct" id="unitPriceProduct" class="product" placeholder="Unit Price" required>
+                <br>
+                <label for="category">Category</label>
+                <select name="category" class="category" id="categoryProduct" class="product" required>
+                    <option value=""></option>
+                </select>
+            </form>
+            <br>
+            <button style="background-color: #6a65fe;" class="addProduct" id="saveProduct">Add Product</button>
+        </div>
+    </div>
+
+    <div class="pageright">
+        <div class="table">
+            <table id="tableProduct">
+                <thead>
+                <tr>
+                    <th><b>Id</b></th>
+                    <th><b>Product</b></th>
+                    <th><b>Amount</b></th>
+                    <th><b>Unit price</b></th>
+                    <th><b>Category</b></th>
+                    <th class="delete"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+                
+            </table>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

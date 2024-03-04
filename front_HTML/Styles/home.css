@@ -1,0 +1,92 @@
+.addProduct{
+    background-color: #6a65fe;
+    width: 40vw;
+    font-weight: bold;
+}
+#amount{
+    width: 35vw;
+    margin-top: 5px;
+}
+select{
+    width: 35.3vw;
+}
+.content{
+    display: flex;
+    justify-content: flex-start;
+}
+.content table{
+    margin-left: 20px;
+    margin-top: 15px;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+    width: 35vw;
+
+}
+.delete{
+    width: 10%;
+}
+.content td{
+    border:1px solid black;
+    border-bottom: none;
+    border-right: none;
+    
+}
+.content th{
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    padding: 5px;
+}
+.totalItem{
+    padding-left: 1vw;
+    
+}
+.totalItem button{
+   width: 90%;
+    
+}
+.totalItem input{
+    background-color: transparent;
+    border: none;
+    width: 50%;
+}
+
+button{
+    border-radius: 4px;
+}
+button:hover{
+    scale: 1.1;
+}
+.pageleft button:hover{
+    scale: 1.01;
+}
+.prices{
+    display: flex;
+}
+input, select{
+    color: black;
+    font-size: large;
+}
+.pageright{
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+}
+.totalItemContainer{
+    display: flex;
+    align-items: flex-end;
+    height: 90vh;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+.pageLeftContent{
+    margin-left: 5px;
+    margin-top: 15px;
+    border-right: 1px solid black;
+    height: 87vh;
+}
+

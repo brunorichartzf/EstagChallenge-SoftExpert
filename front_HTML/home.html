@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="Styles/header.css">
+    <link rel="stylesheet" href="Styles/home.css">
+    <script src="Scripts/home.js" defer></script>
+</head>
+<body>
+    <div class="header">
+    <div>
+        <h1>Suite Store</h1>
+    </div>
+    <div class="headerItems">
+            <a href="home.html"><button>Home</button></a>
+            <a href="cadProduto.html"><button>Products</button></a>
+            <a href="cadCategoria.html"><button>Categories</button></a>
+            <a href="history.html"><button>History</button></a>
+    </div>
+    </div>
+
+    <div class="content">
+    <div class=pageleft>
+        <div class="pageLeftContent">
+        <form id="homeForm" class="form">
+            <div class="inputs">
+            <label for="product">Product: </label>
+            <select name="product" class="product" id="product" required>
+                <option value=""></option>
+            </select>
+            <br>
+            <label for="amount">Amount: </label>
+            <input type="number" step="1" min="1" class="product" id="amount" placeholder="Amount" required>
+            </input>
+            </div>
+            <br>
+            
+            <div class="prices">
+            <label for="taxValue">Tax: </label>
+            <input type="text" name="taxValue" id="taxValue" value="" disabled style="background-color: transparent;
+            border: none;">
+            </input>
+            <br>
+            <label for="unitPrice">Unit price: </label>
+            <input type="text" name="unitPrice" id="unitPrice" value="" disabled style="background-color: transparent;
+            border: none;">
+            </input>
+            <br>
+            <label for="units">Units available: </label>
+            <input type="text" name="units" id="units" value="" disabled style="background-color: transparent;
+            border: none;">
+            </input>
+            </div>
+            <br>
+
+        </form>
+        
+        <button class="addProduct" id="addProduct">Add Product</button>
+        </div>
+    </div>
+
+    <div class="pageright">
+        <div class="cartDiv">
+        <table id="cart">
+            <thead>
+            <tr>
+                <th>Product</th>
+                <th>Unit Price</th>
+                <th>Amount</th>
+                <th>Total</th>
+                <th class="delete"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        </div>
+
+        <div class="totalItemContainer">
+        <div class="totalItem">
+            <label for="tax">Tax: </label>
+            <input type="text" name="tax" class="tax" id="tax" disabled value="">
+            <br>
+            <label for="total">Total: </label>
+            <input type="text" name="total" class="total" id="total" disabled value="">
+            <br>
+            <button onclick="location.reload();">Cancel</button>
+            <button style="background-color: #6a65fe;" id="confirm">Confirm</button>
+        </div>
+        </div>
+    </div>  
+    </div>
+</body>
+</html>

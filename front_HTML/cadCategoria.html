@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Categoria</title>
+    <link rel="stylesheet" href="Styles/header.css">
+    <link rel="stylesheet" href="Styles/cadCategoria.css">
+    <script src="Scripts/cadCategoria.js" defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Categories</h1>
+        </div>
+        <div class="headerItems">
+            <a href="home.html"><button>Home</button></a>
+            <a href="cadProduto.html"><button>Products</button></a>
+            <a href="cadCategoria.html"><button>Categories</button></a>
+            <a href="history.html"><button>History</button></a>
+    </div>
+        </div>
+    
+        <div class="content">
+        <div class="contentleft">
+        <div class="form">
+            <form id="categoryForm">
+                <label for="categoryName">Category name: </label>
+                <input type="text" name="categoryName" id="categoryName" class="category" placeholder="Category Name" required>
+                <br>
+                <label for="taxCategory">Tax:  </label>
+                <input type="number" min="0" name="taxCategory" id="taxCategory" class="category" placeholder="Tax" required>
+            </form>
+            <br>
+            <button class="addProduct" id="saveCategory">Add Category</button>
+            
+        </div>
+    </div>
+    <div class="contentright">
+        <div class="table">
+            <table id="tableCategory">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Category</th>
+                    <th>Tax</th>
+                    <th class="delete"></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+.content{
+    display: flex;
+}
+.content table{
+    margin-left: 20px;
+    margin-top: 15px;
+    width: 45vw;
+    border-collapse: collapse;
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+
+}
+.delete{
+    width: 7%;
+}
+.content td{
+    border:1px solid black;
+    border-bottom: none;
+    border-right: none;
+}
+.content th{
+    border: 1px solid black;
+    border-top: none;
+    border-right: none;
+    padding: 5px;
+}
+.pageleft{
+    flex: 1;
+    height: 87vh;
+    border-right: 1px solid black;
+    margin-top: 15px;
+    margin-left: 10px;
+}
+button:hover{
+    scale: 1.1;
+}
+.pageleft button:hover{
+    scale: 1.01;
+}
+.pageright{
+    flex: 1;
+}
+.pageleft button{
+    width: 38vw;
+}
+
+#productName{
+    width: 30vw;
+}
+#amountProduct{
+    width: 33vw;
+}
+#unitPriceProduct{
+    width: 32.6vw;
+}
+#categoryProduct{
+    width: 33vw;
+}
