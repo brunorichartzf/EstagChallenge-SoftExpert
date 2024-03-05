@@ -1,31 +1,26 @@
-const url = 'http:localhost/cadCategoria.php'
+const url = 'http:localhost/routers/cadCategoria.php'
 const form = document.querySelector('#categoryForm')
-//Set
-const setLocalCategory = (dbCategory) => localStorage.setItem("db_category", JSON.stringify(dbCategory))
-
-//Create
-const createCategory = (category) => {
-    const dbCategory = readCategory()
-    dbCategory.push(category)
-    setLocalCategory(dbCategory)
-}
 
 //Read
-const readCategory = () => JSON.parse(localStorage.getItem("db_category")) ?? []
+const getCategories = () => fetch(url).then((res) => { return res.json(); })
 
-const pullCategory = () => {
-    const categories = fetch(url)
-    
+async function test(){
+    let categories = await getCategories()
+    console.log(categories)
 }
- pullCategory()
-
+test()
 
 //Delete
-const deleteCategory = (index) => {
-    const dbCategory = readCategory()
-    dbCategory.splice(index,1)
-    setLocalCategory(dbCategory)
+const deleteCat = (id) =>{
+    try {
+        const res = fetch(url+'?id='+id, {
+            method: 'DELETE',
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
 }
+
 
 const isValidFields = () => {
     console.log("Verifying")
@@ -40,19 +35,6 @@ const clearFields = () => {
 }
 
     //Save
-const saveCategory = () => {
-    if (isValidFields()) {
-        const category = {
-            name: (document.getElementById('categoryName').value).replace(/</g, "&lt;").replace(/>/g, "&gt;"),
-            tax: document.getElementById('taxCategory').value
-        }
-        createCategory(category)
-        clearFields()
-        updateTable()
-        console.log("Registering Category")
-    }
-}
-
 const postCategory = () => {
         if (isValidFields()) {
             const data = new FormData(form);
@@ -65,24 +47,21 @@ const postCategory = () => {
                 console.log(error.message);
             }
             clearFields()
-            updateTable()
+            location.reload()
         }
 }
 
-    //Delete
-
     //Update Table
 var categoryId = 0
-const createRow = (category, index) => {
+const createRow = (dbCategory) => {
     const newRow = document.createElement('tr')
     newRow.innerHTML = `
-    <td>${categoryId}</td>
-    <td>${category.name}</td>
-    <td>${Number(category.tax).toFixed(2)}%</td>
-    <td><button type="button" id="delete-${index}">Delete</button></td>
+    <td>${dbCategory.code}</td>
+    <td>${dbCategory.name}</td>
+    <td>${Number(dbCategory.tax).toFixed(2)}%</td>
+    <td><button type="button" id="${dbCategory.code}">Delete</button></td>
     `
     document.querySelector('#tableCategory>tbody').appendChild(newRow)
-    categoryId++
 }
 
 const clearTable = () => {
@@ -90,25 +69,27 @@ const clearTable = () => {
     rows.forEach(row => row.parentNode.removeChild(row))
 }
 
-const updateTable = () => {
-    const dbCategory = readCategory()
+const updTable = async() => {
+    const dbCategory = await getCategories()
     clearTable()
-    categoryId = 0
+    var i = 0
     dbCategory.forEach(createRow)
+    
 }
 
 const deleteRow = (event) => {
     if (event.target.type == 'button'){
-        const [action, index] = event.target.id.split('-')
-        deleteCategory(index)
-        updateTable()
+        const index = event.target.id
+        console.log(index)
+        deleteCat(index)
+        location.reload()
         
     }
 
 
 }
 
-updateTable()
+updTable()
 
 //Events
 document.getElementById("saveCategory").addEventListener('click', ()=> postCategory())
