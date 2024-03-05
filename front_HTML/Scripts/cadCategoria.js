@@ -47,7 +47,6 @@ const postCategory = () => {
 }
 
     //Update Table
-var categoryId = 0
 const createRow = (dbCategory) => {
     const newRow = document.createElement('tr')
     newRow.innerHTML = `

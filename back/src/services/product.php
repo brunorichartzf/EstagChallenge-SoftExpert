@@ -12,11 +12,6 @@ function insert($productName, $amount, $unitPrice, $category){
 
     $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
 
-    error_log($productName);
-            error_log($amount);
-            error_log($unitPrice);
-            error_log($category);
-
     $insert = $connection->prepare("INSERT INTO products (NAME, AMOUNT, PRICE, CATEGORY_CODE) VALUES (?,?,?,?)");
     $insert->execute([$productName, $amount, $unitPrice, $category]);
 };
