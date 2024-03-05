@@ -1,32 +1,67 @@
-const getLocalStorage = () => JSON.parse(localStorage.getItem('dbProduct')) ?? []
-const getLocalStorageCategory = () => JSON.parse(localStorage.getItem('db_category')) ?? []
-const setLocalStorage = (dbProduct) =>localStorage.setItem("dbProduct", JSON.stringify(dbProduct))
+const form = document.querySelector('#productForm')
+const url = 'http:localhost/routers/cadProduto.php'
+const categoryUrl = 'http:localhost/routers/cadCategoria.php'
+select = document.querySelector("select");
 
 //Create
-const createProduct = (product) => {
-    const dbProduct = getLocalStorage()
-    dbProduct.push(product)
-    setLocalStorage(dbProduct)
+const createProduct = () => {
+    if (isValidFields()) {
+        const data = new FormData(form);
+        const id = select.options[select.selectedIndex].id;
+        data.append("id", id);
+
+        try {
+            const res = fetch(url, {
+                method: 'POST',
+                body: data,
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+        updateTable()
+        clearFields()
+        
+    }
 }
 
 //Read
-const readProduct = () => getLocalStorage()
-const readCategory = () => getLocalStorageCategory()
-const categories = readCategory()
-select = document.querySelector("select");
+const getProducts = () => fetch(url).then((res) => { return res.json(); })
 
-for (const i of categories) {
-    const option = document.createElement('option');
-    option.textContent = i.name;
-    option.value = i.name;
-    select.appendChild(option);
+const getCategories = () => fetch(categoryUrl).then((res) => { return res.json(); })
+
+const readCategories = async () => {
+    const categories = await getCategories()
+    return categories
 }
 
+const readProducts = async () => {
+    const products = await getProducts()
+    return products
+}
+
+
+const listCategories = async() => {
+    const categories = await getCategories()
+    for (const i of categories) {
+        const option = document.createElement('option');
+        option.textContent = i.name;
+        option.value = i.name;
+        option.id = i.code;
+        select.appendChild(option);
+    }
+}
+
+listCategories()
+
 //Delete
-const deleteProduct = (index) => {
-    const dbProduct = readProduct()
-    dbProduct.splice(index,1)
-    setLocalStorage(dbProduct)
+const deleteProduct = (id) => {
+    try {
+        const res = fetch(url+'?id='+id, {
+            method: 'DELETE',
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
 //Functions
@@ -52,23 +87,32 @@ const saveProduct = () => {
         }
         createProduct(product)
         clearFields()
-        updateTable()
+        location.reload()
         console.log("Cadastrando Produto")
     }
 }
-var productId = 0
-const createRow = (product, index) => {
+
+const createRow = async (product) => {
     const newRow = document.createElement('tr')
+    console.log(product.category_code)
+    const categories = await readCategories()
+    console.log(categories)
+    var category
+    for(i in categories){
+        if (categories[i].code == product.category_code){
+            category = categories[i].name
+            console.log(category)
+        }
+    }
     newRow.innerHTML = `
-    <td>${productId}</td>
-    <td>${product.productName}</td>
+    <td>${product.code}</td>
+    <td>${product.name}</td>
     <td>${product.amount}</td>
-    <td>$${Number(product.unitPrice).toFixed(2)}</td>
-    <td>${product.category}</td>
-    <td><button type="button" id="delete-${index}">Delete</button></td>
+    <td>$${Number(product.price).toFixed(2)}</td>
+    <td>${category}</td>
+    <td><button type="button" id="delete-${product.code}">Delete</button></td>
     `
     document.querySelector('#tableProduct>tbody').appendChild(newRow)
-    productId ++
 }
 
 const clearTable = () => {
@@ -76,10 +120,9 @@ const clearTable = () => {
     rows.forEach(row => row.parentNode.removeChild(row))
 }
 
-const updateTable = () => {
-    const dbProduct = readProduct()
+const updateTable = async () => {
+    const dbProduct = await getProducts()
     clearTable()
-    productId = 0
     dbProduct.forEach(createRow)
 }
 
@@ -87,7 +130,7 @@ const deleteRow = (event) => {
     if (event.target.type == 'button'){
         const [action, index] = event.target.id.split('-')
         deleteProduct(index)
-        updateTable()
+        location.reload()
     }
 
 

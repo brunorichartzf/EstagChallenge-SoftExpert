@@ -4,11 +4,6 @@ const form = document.querySelector('#categoryForm')
 //Read
 const getCategories = () => fetch(url).then((res) => { return res.json(); })
 
-async function test(){
-    let categories = await getCategories()
-    console.log(categories)
-}
-test()
 
 //Delete
 const deleteCat = (id) =>{
