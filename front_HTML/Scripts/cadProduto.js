@@ -59,6 +59,7 @@ const deleteProduct = (id) => {
         const res = fetch(url+'?id='+id, {
             method: 'DELETE',
         });
+        location.reload()
     } catch (error) {
         console.log(error.message);
     }
@@ -130,7 +131,6 @@ const deleteRow = (event) => {
     if (event.target.type == 'button'){
         const [action, index] = event.target.id.split('-')
         deleteProduct(index)
-        location.reload()
     }
 
 

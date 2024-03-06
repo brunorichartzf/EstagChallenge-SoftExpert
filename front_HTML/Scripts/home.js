@@ -1,68 +1,79 @@
+const form = document.querySelector('#homeForm')
+const url = 'http:localhost/routers/cadHome.php'
+const productUrl = 'http:localhost/routers/cadProduto.php'
+const categoryUrl = 'http:localhost/routers/cadCategoria.php'
+select = document.querySelector("select");
+
 //Product Caller
-const getLocalStorageProduct = () => JSON.parse(localStorage.getItem('dbProduct')) ?? []
-const readProduct = () => getLocalStorageProduct()
-const setLocalStorageProduct = (dbProduct) =>localStorage.setItem("dbProduct", JSON.stringify(dbProduct))
-
-const getLocalStorageCategory = () => JSON.parse(localStorage.getItem('db_category')) ?? []
-const readCategory = () => getLocalStorageCategory()
-
-
-
-const categories = readCategory()
-
-const products = readProduct()
 select = document.querySelector("select")
 
+const getProducts = () => fetch(url).then((res) => { return res.json(); })
+const getCategories = () => fetch(categoryUrl).then((res) => { return res.json(); })
 
-
-
-for (const i of products) {
-    const option = document.createElement('option')
-    option.textContent = i.productName
-    option.value = i.productName
-    select.appendChild(option)
+const listProducts = async() => {
+    const categories = await getProducts()
+    for (const i of categories) {
+        const option = document.createElement('option');
+        option.textContent = i.name;
+        option.value = i.name;
+        option.id = i.name + '-' + i.code;
+        select.appendChild(option);
+    }
 }
+
+listProducts()
+
 
 var valueofProduct
 var amount
 var productCategory
+var productCategoryId
+var productId
 var taxValue
 var unitPrice
 var id
 var units
+var stockAmount
 
-const checkProduct = () =>{
+const checkProduct = async () =>{
     valueofProduct = document.getElementById("product").value
-    
+    const products = await getProducts()
+    const categories = await getCategories()
     for(const a of products) {
-        if(a.productName == valueofProduct){
-            const stockAmount = readProduct()[document.getElementById("product").options.selectedIndex - 1].amount
-            productCategory = a.category
-            unitPrice = a.unitPrice
+        if(a.name == valueofProduct){
+            stockAmount = a.amount
+            productCategoryId = a.category_code
+            for(i of categories){
+                if(i.code == productCategoryId){
+                    productCategory = i.name
+                }
+            }
+            unitPrice = a.price
             units = stockAmount
+            productId = a.code
         }
     }
     for(const b of categories){
-        if(b.name == productCategory){
+        if(b.code == productCategoryId){
             taxValue = b.tax
         }
     }
     taxUnitSetter()
 }
 
-const taxUnitSetter = () => {
+const taxUnitSetter = async () => {
     if(document.getElementById("product").value == ""){
         taxValue = ""
         unitPrice = ""
         units = ""
     }
-    document.getElementById("taxValue").setAttribute("value", (Number(taxValue).toFixed(2) + "%"))
+    document.getElementById("taxValue").setAttribute("value", taxValue + "%")
     document.getElementById("unitPrice").setAttribute("value", ("$"+Number(unitPrice).toFixed(2)))
     document.getElementById("units").setAttribute("value", units)
 }
 
 const amountSetter = () => {
-    amount = document.getElementById("amount").value
+    amount = Number(document.getElementById("amount").value)
 }
 
 
@@ -78,7 +89,7 @@ const createRow = (product, index) => {
     <td>$${Number(product[1]).toFixed(2)}</td>
     <td>${product[2]}</td>
     <td>$${((product[2]*product[1])*(1+product[3]/100)).toFixed(2)}</td>
-    <td><button type="button" id="${index}">Delete</button></td>
+    <td><button type="button" id="${product[4]}">Delete</button></td>
     `
     document.querySelector('#cart>tbody').appendChild(newRow)
 }
@@ -90,7 +101,9 @@ const clearTable = () => {
 }
 
 const updateTable = () => {
-    const product = [valueofProduct, unitPrice, amount, taxValue, id]
+    const prodTotal = (unitPrice * amount) * (1+taxValue/100)
+    const totalTax = (unitPrice * amount) * (taxValue/100)
+    const product = [valueofProduct, unitPrice, amount, taxValue, productId, prodTotal, totalTax]
     arrayofProducts.push(product)
     console.log(product)
     clearTable()
@@ -124,32 +137,27 @@ const decreaseTotal = (id) => {
     totalTax= 0
 }
 
-const isItemPresent = () => {
-    const item = document.getElementById("product").value
-    console.log(item)
-    for (const i of arrayofProducts){
-        if (i[0] == item){
-            alert("Item already in cart, please delete to edit amount.")
-            return false
-        }else{return true}
-    }
-    return true
-}
 
-const saveProduct = () => {
-    if(isValidFields()){
-        id = document.getElementById("product").options.selectedIndex - 1
-        const stockAmount = readProduct()[id].amount
-        const product = readProduct()[id]
+const saveProduct = async () => {
+    
+    if(isValidFields()){ 
+        var product
+        const products = await getProducts()
+        for(i in products){
+            if(products[i].code == productId){
+                product = products[i]
+            }
+        }
         if(Number(amount) > Number(stockAmount)){
             alert("Amount bigger than available stock: "+stockAmount+" Units")
         }else{
         product.amount -= amount
+        console.log(product)
         updateTable()
         clearFields()
         console.log("Cadastrando Produto")
         increaseTotal()
-        updateProduct(product,id)
+        updateProduct(product)
         }
     }
     
@@ -164,15 +172,37 @@ const clearFields = () => {
 }
 
 
-const deleteRow = (event) => {
+const deleteRow = async (event) => {
     
     if (event.target.type == 'button'){
-        console.log(event.target.id)
         const id = event.target.id
         var row = document.getElementById(id)
         row.parentNode.parentNode.remove()
-        arrayofProducts.splice(id,1)
-        console.log(arrayofProducts)
+        var cont = 0
+        for(i of arrayofProducts){
+            if(i[4]==id){
+                const products = await getProducts()
+                var amt
+                for(j of products){
+                    if(j.code == id){
+                        console.log("jamount: "+j.amount)
+                        console.log("iamount: "+i[2])
+                       amt = Number(j.amount) + Number(i[2])
+                       console.log(amt)
+                    }
+                }
+                try {
+                    const res = fetch(url+'?id='+id+'&amount='+amt, {
+                        method: 'UPDATE',
+                    });
+                } catch (error) {
+                    console.log(error.message);
+                }
+                clearFields()
+                arrayofProducts.splice(cont,1)
+            }
+            cont++
+        }
         decreaseTotal()
         increaseTotal()
     }
@@ -180,36 +210,84 @@ const deleteRow = (event) => {
 
 }
 
-const getLocalStorage = () => JSON.parse(localStorage.getItem('dbPurchase')) ?? []
-const setLocalStorage = (dbProduct) =>localStorage.setItem("dbPurchase", JSON.stringify(dbProduct))
 
 const purchaseDate = () =>{
     return (new Date()).toLocaleDateString()
 }
 
 const createPurchase = () => {
-    const dbPurchase = getLocalStorage()
-    const purchase = {
-        products: arrayofProducts,
-        totalTax: totalTax,
-        total: total,
-        date: (new Date()).toLocaleDateString()
+    data = new FormData()
+    data.append("total", total)
+    data.append("tax", totalTax)
+    data.append("date", purchaseDate())
+
+    try {
+        const res = fetch(url, {
+            method: 'POST',
+            body: data,
+        });
+    } catch (error) {
+        console.log(error.message);
     }
-    dbPurchase.push(purchase)
-    setLocalStorage(dbPurchase)
+    for(i of arrayofProducts){
+        
+        try {
+            const res2 = fetch(url+'?productCode='+i[4]+'&itemAmount='+i[2]+'&price='+i[5]+'&itemTax='+i[6], {
+                method: 'INSERT_ITEMS',
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+    
     location.reload()
 }
 
-const updateProduct = (product, index) =>{
-    const dbProduct = readProduct()
-    dbProduct[index] = product
-    setLocalStorageProduct(dbProduct)
+const updateProduct = async (product) =>{
+    const products = await getProducts()
+    var amt
+    for(i in products){
+        if(products[i].code == product.code){
+           amt = product.amount
+        }
+    }
+    try {
+        const res = fetch(url+'?id='+product.code+'&amount='+amt, {
+            method: 'UPDATE',
+        });
+    } catch (error) {
+        console.log(error.message);
+    }
 }
 
+const cancel = async () => {
+    const products = await getProducts()
+    var amt = 0
+    for(i of arrayofProducts){
+        console.log(i)
+        for(j of products){
+            if(i[4] == j.code){
+                amt = Number(j.amount) + Number(i[2])
+                try {
+                    const res = fetch(url+'?id='+j.code+'&amount='+amt, {
+                        method: 'UPDATE',
+                    });
+                } catch (error) {
+                    console.log(error.message);
+                }
+            }
+        }
+        
+
+    }
+    location.reload()
+}
 
 //Events
 document.getElementById("addProduct").addEventListener('click', ()=> saveProduct())
 document.getElementById("confirm").addEventListener('click', ()=> createPurchase())
+document.getElementById("cancel").addEventListener('click', ()=> cancel())
 document.querySelector('#cart>tbody').addEventListener('click', deleteRow)
+
 document.getElementById("product").addEventListener('change', ()=> checkProduct())
 document.getElementById("amount").addEventListener('change', ()=> amountSetter())

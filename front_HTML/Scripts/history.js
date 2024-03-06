@@ -1,12 +1,16 @@
-const getLocalStorage = () => JSON.parse(localStorage.getItem('dbPurchase')) ?? []
+const url = 'http:localhost/routers/cadHistory.php'
+
+const getHistory = () => fetch(url).then((res) => { return res.json(); })
+const getProducts = () => fetch(url,{ method:'GET_PRODUCTS',}).then((res) => { return res.json(); })
 
 var code = 0
 
-const setHistory = () =>{
-    const dbPurchase = getLocalStorage()
-    for(const i of dbPurchase){
-        createHistoryRow(code, i.totalTax, i.total, i.date )
+const setHistory = async () =>{
+    const history = await getHistory()
+    for(const i of history){
         console.log(i)
+        createHistoryRow(i.code, i.tax, i.total, i.order_date )
+        
         code += 1
     }
 }
@@ -16,8 +20,8 @@ const createHistoryRow = (code, tax, total, date) => {
     newRow.innerHTML = `
     <td>${code}</td>
     <td>${date}</td>
-    <td>$${tax.toFixed(2)}</td>
-    <td>$${(total).toFixed(2)}</td>
+    <td>$${Number(tax).toFixed(2)}</td>
+    <td>$${Number(total).toFixed(2)}</td>
     <td><button type="button" id="${code}">View</button></td>
     `
     document.querySelector('#history>tbody').appendChild(newRow)
@@ -28,9 +32,12 @@ const clearTable = () => {
     rows.forEach(row => row.parentNode.removeChild(row))
 }
 
-const setProducts = (event) => {
+const setProducts = async (event) => {
     clearTable()
     const dbPurchase = getLocalStorage()
+
+    const products = await getProducts()
+
     if (event.target.type == 'button'){
         const index = event.target.id
         const purchase = dbPurchase.at(index)
