@@ -239,8 +239,9 @@ const createPurchase = () => {
             console.log(error.message);
         }
     }
-    
-    location.reload()
+    clearTable()
+    arrayofProducts = []
+    decreaseTotal()
 }
 
 const updateProduct = async (product) =>{

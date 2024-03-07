@@ -31,9 +31,15 @@ function selectProducts($code){
 
     $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
 
-    $sql = "SELECT * FROM order_item WHERE CODE = $code";
+    $sql = "SELECT * FROM order_item WHERE ORDER_CODE = $code";
     $result = $connection->query($sql);
 
+    $data = [];
+    while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+ 
+    echo json_encode($data);
 }
 
 ?>

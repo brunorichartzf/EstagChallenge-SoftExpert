@@ -1,6 +1,7 @@
 const form = document.querySelector('#productForm')
 const url = 'http:localhost/routers/cadProduto.php'
 const categoryUrl = 'http:localhost/routers/cadCategoria.php'
+const historyUrl = 'http:localhost/routers/cadHistory.php'
 select = document.querySelector("select");
 
 //Create
@@ -29,6 +30,9 @@ const getProducts = () => fetch(url).then((res) => { return res.json(); })
 
 const getCategories = () => fetch(categoryUrl).then((res) => { return res.json(); })
 
+const getHistory = () => fetch(historyUrl).then((res) => { return res.json(); })
+const getHistoryProducts = (code) => fetch(historyUrl+'?code='+code,{ method:'GET_PRODUCTS',}).then((res) => { return res.json(); })
+
 const readCategories = async () => {
     const categories = await getCategories()
     return categories
@@ -54,14 +58,33 @@ const listCategories = async() => {
 listCategories()
 
 //Delete
-const deleteProduct = (id) => {
-    try {
-        const res = fetch(url+'?id='+id, {
-            method: 'DELETE',
-        });
-        location.reload()
-    } catch (error) {
-        console.log(error.message);
+const deleteProduct = async(id) => {
+    const history = await getHistory()
+    const products = await getProducts()
+
+    
+    var hasProduct = false
+
+    for(i of history){
+        const historyProducts = await getHistoryProducts(i.code)
+        for(j of historyProducts){
+                if(j.product_code == id){
+                    hasProduct = true
+                }
+        }
+    }
+    
+    if(hasProduct){
+        alert("Error: Can't delete this product. A History item requires it.")
+    }else{
+        try {
+            const res = fetch(url+'?id='+id, {
+                method: 'DELETE',
+            });
+            location.reload()
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 }
 
@@ -107,7 +130,7 @@ const createRow = async (product) => {
     }
     newRow.innerHTML = `
     <td>${product.code}</td>
-    <td>${product.name}</td>
+    <td>${(product.name).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
     <td>${product.amount}</td>
     <td>$${Number(product.price).toFixed(2)}</td>
     <td>${category}</td>
@@ -127,10 +150,10 @@ const updateTable = async () => {
     dbProduct.forEach(createRow)
 }
 
-const deleteRow = (event) => {
+const deleteRow = async (event) => {
     if (event.target.type == 'button'){
         const [action, index] = event.target.id.split('-')
-        deleteProduct(index)
+        await deleteProduct(index)
     }
 
 

@@ -1,7 +1,9 @@
 const url = 'http:localhost/routers/cadHistory.php'
+const productsUrl = 'http:localhost/routers/cadProduto.php'
 
 const getHistory = () => fetch(url).then((res) => { return res.json(); })
-const getProducts = () => fetch(url,{ method:'GET_PRODUCTS',}).then((res) => { return res.json(); })
+const getProducts = (code) => fetch(url+'?code='+code,{ method:'GET_PRODUCTS',}).then((res) => { return res.json(); })
+const getProductsList = () => fetch(productsUrl).then((res) => { return res.json(); })
 
 var code = 0
 
@@ -34,26 +36,23 @@ const clearTable = () => {
 
 const setProducts = async (event) => {
     clearTable()
-    const dbPurchase = getLocalStorage()
-
-    const products = await getProducts()
 
     if (event.target.type == 'button'){
         const index = event.target.id
-        const purchase = dbPurchase.at(index)
-        
-        console.log(purchase)
-        var id = 0
-        for(const i of purchase.products){
-        
-        const product = purchase.products[id][0]
-        const price = purchase.products[id][1]
-        const quantity = purchase.products[id][2]
-        const tax = ((purchase.products[id][3]/100) * price)*quantity
-        const total = Number(tax)+Number(price*quantity)
+        const products = await getProducts(index)
+        const productsList = await getProductsList()
+        console.log(productsList)
 
-        createProductRow(product, price, quantity, tax, total) 
-        id+=1
+        var productName
+        for(const i of products){
+        
+        for(const j of productsList){
+            if(i.product_code == j.code){
+                productName = j.name
+            }
+        }
+
+        createProductRow(productName, ((i.price - i.tax)/i.amount), i.amount, i.tax, i.price) 
         }
     }
 

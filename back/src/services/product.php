@@ -24,7 +24,7 @@ function select(){
 
     $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
 
-    $sql = "SELECT * FROM products";
+    $sql = "SELECT * FROM products ORDER BY CODE ASC";
     $result = $connection->query($sql);
  
     $data = [];

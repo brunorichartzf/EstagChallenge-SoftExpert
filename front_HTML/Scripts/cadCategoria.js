@@ -1,18 +1,34 @@
 const url = 'http:localhost/routers/cadCategoria.php'
+const productUrl = 'http:localhost/routers/cadProduto.php'
+
 const form = document.querySelector('#categoryForm')
 
 //Read
 const getCategories = () => fetch(url).then((res) => { return res.json(); })
+const getProducts = () => fetch(productUrl).then((res) => { return res.json(); })
 
 
 //Delete
-const deleteCat = (id) =>{
-    try {
-        const res = fetch(url+'?id='+id, {
-            method: 'DELETE',
-        });
-    } catch (error) {
-        console.log(error.message);
+const deleteCat = async(id) =>{
+    var hasCategory = false
+    const categories = await getProducts()
+
+    for(i of categories){
+        if(i.category_code == id){
+            hasCategory = true
+        }
+    }
+
+    if(hasCategory){
+        alert("Error: Can't delete category. A product requires it.")
+    }else{
+        try {
+            const res = fetch(url+'?id='+id, {
+                method: 'DELETE',
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
     }
 }
 
@@ -32,7 +48,7 @@ const clearFields = () => {
     //Save
 const postCategory = () => {
         if (isValidFields()) {
-            const data = new FormData(form);
+            const data = new FormData(form)
             try {
                 const res = fetch(url, {
                     method: 'POST',
@@ -51,7 +67,7 @@ const createRow = (dbCategory) => {
     const newRow = document.createElement('tr')
     newRow.innerHTML = `
     <td>${dbCategory.code}</td>
-    <td>${dbCategory.name}</td>
+    <td>${(dbCategory.name).replace(/</g, "&lt;").replace(/>/g, "&gt;")}</td>
     <td>${Number(dbCategory.tax).toFixed(2)}%</td>
     <td><button type="button" id="${dbCategory.code}">Delete</button></td>
     `
@@ -66,16 +82,15 @@ const clearTable = () => {
 const updTable = async() => {
     const dbCategory = await getCategories()
     clearTable()
-    var i = 0
     dbCategory.forEach(createRow)
     
 }
 
-const deleteRow = (event) => {
+const deleteRow = async (event) => {
     if (event.target.type == 'button'){
         const index = event.target.id
         console.log(index)
-        deleteCat(index)
+        await deleteCat(index)
         location.reload()
         
     }
