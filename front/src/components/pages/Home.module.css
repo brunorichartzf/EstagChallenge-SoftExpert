@@ -1,0 +1,140 @@
+.content{
+    display: flex;
+    height: 91vh;
+    font-size: larger;
+}
+
+.pageLeft{
+    display: flex;
+    flex-wrap: wrap;
+    flex: 1;
+    max-height: 152px;
+}
+
+.pageRight{
+    flex: 1;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-left: 1em;
+    justify-content: right;
+    height: 91vh;
+    margin-right: 1em;
+    border-left: 1px solid black;
+}
+
+.form{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 1em;
+    width: 100%;
+    justify-content: center;
+}
+
+.form select{
+    margin-right: 0.5em;
+}
+
+.inputs select, .inputs input{
+    width: 100%;
+    margin-top: 0.5em;
+    border-radius: 5px;
+    height: 2em;
+    border: transparent;
+    background-color: rgb(238, 238, 238);
+}
+
+.inputs{
+    width: 100%;
+    justify-content: center;
+}
+
+.prices{
+    display: flex;
+    align-self: center;
+    margin-top: 1em;
+    border: 1px solid black;
+    border-radius: 20px;
+}
+
+.prices input{
+    height: 2em;
+    width: 5em;
+    border: 0;
+    background-color: transparent;
+}
+
+.prices label{
+    margin-left: 1em;
+}
+
+
+.pageLeft button{
+    margin-top: 1em;
+    margin-left: 1em;
+    width: 100%;
+    height: 1.5em;
+    background-color: #6a65fe;
+}
+
+.pageRight table{
+    width: 100%;
+
+}
+
+.totalItem{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    margin-bottom: 1em;
+}
+
+.totalItem input, .totalItem button{
+    height: 1.5em;
+}
+
+.totalItem div{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.totalItem div input{
+    width: 80%;
+    border: 0;
+    background-color: transparent;
+    margin-bottom: 0.2em;
+}
+
+.totalItem div button{
+    width: 100%;
+}
+
+.confirm{
+    background-color: #6a65fe;
+    margin-top: 0.5em;
+}
+
+
+.cartDiv{
+    width: 100%;
+    margin-left: 1em;
+    margin-top: 0.5em;
+}
+
+table {
+    border-collapse: collapse;
+    
+}
+
+table thead tr{
+    border: 1px solid black;
+    border-top: 0px;
+}
+
+table td{
+    border: 1px solid black;
+    border-bottom: 0px;
+}
+
+.content button:hover{
+    scale: 1.03;
+}

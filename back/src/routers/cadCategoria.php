@@ -19,6 +19,7 @@ function runRequestMethod()
             $categoryName = $_POST['categoryName'];
             $taxCategory= $_POST['taxCategory'];
             insert($categoryName,$taxCategory);
+            break;
         case "DELETE":
             $id = $_GET['id'];
             delete($id);

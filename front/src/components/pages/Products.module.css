@@ -1,0 +1,73 @@
+.content{
+    display: flex;
+    flex-wrap: nowrap;
+    margin: 0 1em 0 1em;
+    font-size: larger;
+}
+
+.pageLeft{
+    flex: 1;
+
+}
+
+.pageRight{
+    flex: 1;
+    height: 91vh;
+    border-left: 1px solid black;
+}
+
+.form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.form form{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+}
+
+.form form input{
+    width: 95%;
+    margin-top: 0.5em;
+    border-radius: 5px;
+    height: 2em;
+    border: transparent;
+    background-color: rgb(238, 238, 238);
+}
+
+.form form select{
+    width: 95%;
+    margin-top: 0.5em;
+    border-radius: 5px;
+    height: 2em;
+    border: transparent;
+    background-color: rgb(238, 238, 238);
+}
+
+.form button{
+    width: 95%;
+    margin-top: 1em;
+    background-color: #6a65fe;
+    height: 1.5em;
+}
+
+.form button:hover{
+    scale: 1.03;
+}
+
+.table{
+    display: flex;
+    justify-content: center;
+    margin-top: 0.4em;
+}
+
+.table table{
+    width: 90%;
+}
+
+.content button:hover{
+    scale: 1.03;
+}
