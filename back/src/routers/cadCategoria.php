@@ -16,8 +16,9 @@ function runRequestMethod()
             return select();
             break;
         case "POST":
-            $categoryName = $_POST['categoryName'];
-            $taxCategory= $_POST['taxCategory'];
+            $category = json_decode(file_get_contents('php://input'));
+            $categoryName = $category->categoryName;
+            $taxCategory= $category->taxCategory;
             insert($categoryName,$taxCategory);
             break;
         case "DELETE":

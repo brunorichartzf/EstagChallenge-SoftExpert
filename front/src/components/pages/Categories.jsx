@@ -1,18 +1,77 @@
 import styles from './Categories.module.css'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 
 function Categories() {
 
-    this.setState({alunos : []})
+    const [category, setCategory] = useState({})
+    const url ='http://localhost/routers/cadCategoria.php'
+    const productsUrl ='http://localhost/routers/cadProduto.php'
+
+    const handleChange = (e) => {
+        const name = e.target.name
+        const value = e.target.value
+        setCategory(values => ({...values, [name]: value}))
+    }
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        axios.post(url,category)
+        console.log(category)
+        window.location.reload()
+    }
+
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        getCategories()
+        getProducts()
+    }, [])
+
+    const getCategories = async () => {
+        const response = await axios.get(url)
+            setCategories(response.data)
+    }
+
+    const [products, setProducts] = useState([])
+
+    const getProducts = async () => {
+        const response = await axios.get(productsUrl)
+            setProducts(response.data)
+    }
+
+    const deleteCategory = (id) => {
+        var hasCategory = false
+    
+        for(let i of products){
+            console.log(i)
+            if(i.category_code == id){
+                hasCategory = true
+            }
+        }
+    
+        if(hasCategory){
+            alert("Error: Can't delete category. A product requires it.")
+        }else{
+            axios.delete(url+'?id='+id)
+            window.location.reload()
+        }
+
+
+        //axios.delete(url+'?id='+id)
+        //window.location.reload()
+    }
 
     return (
         <div className={`${styles.content}`}>
             <div className={`${styles.contentLeft}`}>
-                <form id='categoryForm'>
-                <input type="text" name="categoryName" id="categoryName" className={`${styles.category}`} placeholder="Category Name" required/>
-                <input type="number" min="0" name="taxCategory" id="taxCategory" className={`${styles.category}`} placeholder="Tax" required/>
-                </form>
+                <form id='categoryForm' onSubmit={handleSubmit}>
+                <input type="text" name="categoryName" id="categoryName" className={`${styles.category}`} placeholder="Category Name" required onChange={handleChange}/>
+                <input type="number" min="0" name="taxCategory" id="taxCategory" className={`${styles.category}`} placeholder="Tax" required onChange={handleChange}/>
                 <button className={`${styles.addProduct}`} id="saveCategory">Add Category</button>
+                </form>
+                
             </div>
 
             <div className={`${styles.contentRight}`}>
@@ -27,7 +86,14 @@ function Categories() {
                             </tr>
                         </thead>
                         <tbody>
-                            
+                        {categories.map((cat,key) =>
+                            <tr key = {key}>
+                                <td>{cat.code}</td>
+                                <td>{cat.name}</td>
+                                <td>{cat.tax}%</td>
+                                <td><button onClick={() => deleteCategory(cat.code)}>Delete</button></td>
+                            </tr>
+                            )}
                         </tbody>
                     </table>
 

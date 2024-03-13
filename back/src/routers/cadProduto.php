@@ -15,10 +15,11 @@ function runRequestMethod()
             return select();
             break;
         case "POST":
-            $productName = $_POST['productName'];
-            $amount= $_POST['amountProduct'];
-            $unitPrice = $_POST['unitPriceProduct'];
-            $category= $_POST['id'];
+            $product = json_decode(file_get_contents('php://input'));
+            $productName = $product->productName;
+            $amount= $product->amountProduct;
+            $unitPrice = $product->unitPriceProduct;
+            $category= $product->category;
             
             insert($productName,$amount,$unitPrice,$category);
         case "DELETE":

@@ -6,7 +6,6 @@ import Products from './components/pages/Products'
 import Categories from './components/pages/Categories'
 import History from './components/pages/History'
 
-
 function App() {
 
   return (

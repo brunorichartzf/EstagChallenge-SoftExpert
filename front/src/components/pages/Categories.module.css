@@ -65,6 +65,10 @@ table td{
     border-bottom: 0px;
 }
 
+table td button{
+    width: 100%;
+}
+
 .content button:hover{
     scale: 1.03;
 }

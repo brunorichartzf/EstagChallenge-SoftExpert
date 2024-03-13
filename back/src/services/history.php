@@ -42,4 +42,23 @@ function selectProducts($code){
     echo json_encode($data);
 }
 
+function selectAllProducts(){
+    $host = "pgsql_desafio";
+    $db = "applicationphp";
+    $user = "root";
+    $pw = "root";
+
+    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+
+    $sql = "SELECT * FROM order_item";
+    $result = $connection->query($sql);
+
+    $data = [];
+    while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+        $data[] = $row;
+    }
+ 
+    echo json_encode($data);
+}
+
 ?>
