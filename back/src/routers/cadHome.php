@@ -1,7 +1,7 @@
 <?php 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: *");
-header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, UPDATE, INSERT_ITEMS");
+header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, PATCH, INSERT_ITEMS");
 header('Content-Type: application/json; charset=utf-8');
 
 include '../services/home.php';
@@ -25,7 +25,7 @@ function runRequestMethod()
             $id = $_GET['id'];
             delete($id);
             break;
-        case "UPDATE":
+        case "PATCH":
             $id = $_GET['id'];
             $amount = $_GET['amount'];
             update($id,$amount);

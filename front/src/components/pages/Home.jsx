@@ -49,6 +49,39 @@ function Home() {
 
     const [cart, setCart] = useState([])
 
+    const [amountChanged, setAmountChanged] = useState(false)
+
+    const decreaseDB = async(id, amount) => {
+        const response = await axios.get(productUrl)
+        const products = response.data
+
+        for(let i of products){
+            if(i.code == id){
+                await axios.patch(url+'?id='+id+'&amount='+(i.amount-amount))
+                setAmountChanged(!amountChanged)
+            }
+        }
+    }
+
+    const increaseDB = async(id, amount) => {
+        const response = await axios.get(productUrl)
+        const products = response.data
+        console.log('uepa')
+
+        for(let i of products){
+            if(i.code == id){
+                await axios.patch(url+'?id='+id+'&amount='+(Number(i.amount)+Number(amount)))
+                setAmountChanged(!amountChanged)
+            }
+        }
+    }
+
+    const cancelCart = async() => {
+        for(let i of cart){
+            await increaseDB(i.product, i.amount)
+        }
+        window.location.reload()
+    }
 
     const addToCart = (e) => {
         e.preventDefault()
@@ -56,6 +89,7 @@ function Home() {
             if(i.code == Number(product.product)){
                 if(i.amount >= Number(product.amount)){
                     setCart(cart => [...cart, product])
+                    decreaseDB(i.code, product.amount)
                 }else{
                     alert("Item amount bigger than available in stock.")
                 }
@@ -92,6 +126,10 @@ function Home() {
         getProds()
         getCategories()
     }, [])
+
+    useEffect(() => {
+        getProds()
+    }, [amountChanged])
 
     const getProds = async () => {
         const response = await axios.get(productUrl)
@@ -217,7 +255,7 @@ function Home() {
                                 <td>${prod.price}</td>
                                 <td>{prod.amount}</td>
                                 <td>${((1 + prod.tax/100) * (prod.amount * prod.price )).toFixed(2)}</td>
-                                <td><button onClick={() => deleteProduct(key)}>Delete</button></td>
+                                <td><button onClick={function(){ deleteProduct(key); increaseDB(prod.product, prod.amount)}}>Delete</button></td>
                             </tr>
                             )}
                         </tbody>
@@ -230,7 +268,7 @@ function Home() {
                         <input type="text" name="tax" className={`${styles.tax}`} id="tax" disabled value={totalTax}/>
                         <label htmlFor="total">Total: $</label>
                         <input type="text" name="total" className={`${styles.total}`} id="total" disabled value={total}/>
-                        <button id="cancel">Cancel</button>
+                        <button id="cancel"onClick={() => cancelCart()}>Cancel</button>
                         <button id="confirm" className={`${styles.confirm}`} onClick={handleSubmit}>Confirm</button>
                         </div>
                     </div>
