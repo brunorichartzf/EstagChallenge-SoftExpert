@@ -5,25 +5,22 @@ header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT");
 header('Content-Type: application/json; charset=utf-8');
 
 
+$host = "pgsql_desafio";
+$db = "applicationphp";
+$user = "root";
+$pw = "root";
+
+global $connection;
+$connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+
 function insert($categoryName, $taxCategory){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
-
+    global $connection;
     $insert = $connection->prepare("INSERT INTO categories (NAME, TAX) VALUES (?,?)");
     $insert->execute([$categoryName,$taxCategory]);
 };
 
 function select(){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "SELECT * FROM categories";
     $result = $connection->query($sql);
@@ -37,12 +34,7 @@ function select(){
 };
 
 function delete($id){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "DELETE FROM categories WHERE code = $id ";
     $connection->query($sql);

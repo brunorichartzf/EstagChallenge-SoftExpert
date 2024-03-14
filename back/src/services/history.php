@@ -4,13 +4,18 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT, UPDATE, GET_PRODUCTS");
 header('Content-Type: application/json; charset=utf-8');
 
-function select(){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
 
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+$host = "pgsql_desafio";
+$db = "applicationphp";
+$user = "root";
+$pw = "root";
+
+global $connection;
+$connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+
+
+function select(){
+    global $connection;
 
     $sql = "SELECT * FROM orders";
     $result = $connection->query($sql);
@@ -24,12 +29,7 @@ function select(){
 };
 
 function selectProducts($code){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "SELECT * FROM order_item WHERE ORDER_CODE = $code";
     $result = $connection->query($sql);
@@ -43,12 +43,7 @@ function selectProducts($code){
 }
 
 function selectAllProducts(){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "SELECT * FROM order_item";
     $result = $connection->query($sql);

@@ -4,25 +4,26 @@ header("Access-Control-Allow-Headers: *");
 header("Access-Control-Allow-Methods: GET, POST, DELETE, PUT");
 header('Content-Type: application/json; charset=utf-8');
 
-function insert($productName, $amount, $unitPrice, $category){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
 
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+$host = "pgsql_desafio";
+$db = "applicationphp";
+$user = "root";
+$pw = "root";
+
+global $connection;
+$connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+
+
+
+function insert($productName, $amount, $unitPrice, $category){
+    global $connection;
 
     $insert = $connection->prepare("INSERT INTO products (NAME, AMOUNT, PRICE, CATEGORY_CODE) VALUES (?,?,?,?)");
     $insert->execute([$productName, $amount, $unitPrice, $category]);
 };
 
 function select(){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "SELECT * FROM products ORDER BY CODE ASC";
     $result = $connection->query($sql);
@@ -36,12 +37,7 @@ function select(){
 };
 
 function delete($id){
-    $host = "pgsql_desafio";
-    $db = "applicationphp";
-    $user = "root";
-    $pw = "root";
-
-    $connection = new PDO("pgsql:host=$host;dbname=$db", $user, $pw);
+    global $connection;
 
     $sql = "DELETE FROM products WHERE code = $id ";
     $connection->query($sql);
