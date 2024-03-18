@@ -1,6 +1,7 @@
 import styles from './Home.module.css'
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import HomeList from '../objs/HomeList'
 
 
 
@@ -66,7 +67,6 @@ function Home() {
     const increaseDB = async(id, amount) => {
         const response = await axios.get(productUrl)
         const products = response.data
-        console.log('uepa')
 
         for(let i of products){
             if(i.code == id){
@@ -115,8 +115,6 @@ function Home() {
 
         window.location.reload()
     }
-
-    //const [products, setProducts] = useState([])
 
     const [categories, setCategories] = useState([])
 
@@ -184,15 +182,6 @@ function Home() {
         setTotalTax(totTax)
     }
 
-    const [, setState] = React.useState(false)
-
-    const deleteProduct = (id) => {
-        cart.splice(id,1)
-        console.log(cart)
-        setState((prev) => !prev)   
-        calcTotal()     
-    }
-
     useEffect(() => {
         calcTotal()
     }, [cart])
@@ -205,6 +194,15 @@ function Home() {
         setTax('-')
         fields = document.querySelectorAll('input')
         fields.forEach(field => field.value = "")
+    }
+
+    const [, setState] = React.useState(false)
+
+    const deleteProduct = (id) => {
+        cart.splice(id,1)
+        console.log(cart)
+        setState((prev) => !prev)   
+        calcTotal()     
     }
 
     return (
@@ -250,13 +248,12 @@ function Home() {
                         </thead>
                         <tbody>
                         {cart.map((prod,key) =>
-                            <tr key = {key} id={prod.product}>
-                                <td>{prod.productName}</td>
-                                <td>${prod.price}</td>
-                                <td>{prod.amount}</td>
-                                <td>${((1 + prod.tax/100) * (prod.amount * prod.price )).toFixed(2)}</td>
-                                <td><button onClick={function(){ deleteProduct(key); increaseDB(prod.product, prod.amount)}}>Delete</button></td>
-                            </tr>
+                            <HomeList
+                            prod = {prod}
+                            key = {key}
+                            deleteProduct={deleteProduct}
+                            increaseDB={increaseDB}
+                            />
                             )}
                         </tbody>
                     </table>

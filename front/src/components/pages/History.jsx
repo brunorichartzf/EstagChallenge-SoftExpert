@@ -1,6 +1,8 @@
 import styles from './History.module.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import HistoryList from '../objs/HistoryList'
+import DetailsList from '../objs/DetailsList'
 
 function History() {
 
@@ -66,13 +68,11 @@ function History() {
                     </thead>
                     <tbody>
                     {purchases.map((purchase,key) =>
-                            <tr key = {key} id={purchase.product}>
-                                <td>{purchase.code}</td>
-                                <td>{purchase.order_date}</td>
-                                <td>${purchase.tax}</td>
-                                <td>${purchase.total}</td>
-                                <td><button onClick={() => loadPurchases(purchase.code)}>View</button></td>
-                            </tr>
+                            <HistoryList
+                            purchase = {purchase}
+                            key = {key}
+                            loadPurchases={loadPurchases}
+                            />
                             )}
                     </tbody>
                 </table>
@@ -95,13 +95,11 @@ function History() {
                     </thead>
                     <tbody>
                     {items.map((item,key) =>
-                            <tr key = {key} id={item.product}>
-                                <td>{productNameGetter(Number(item.product_code))}</td>
-                                <td>${((Number(item.price) - Number(item.tax))/Number(item.amount)).toFixed(2)}</td>
-                                <td>{item.amount}</td>
-                                <td>${item.tax}</td>
-                                <td>${item.price}</td>
-                            </tr>
+                            <DetailsList
+                            item = {item}
+                            key={key}
+                            productNameGetter={productNameGetter}
+                            />
                     )}
                     </tbody>
                 </table>

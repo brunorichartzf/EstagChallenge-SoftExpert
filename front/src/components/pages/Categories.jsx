@@ -2,6 +2,7 @@ import styles from './Categories.module.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import CategoryList from '../objs/CategoryList'
 
 function Categories() {
 
@@ -38,29 +39,8 @@ function Categories() {
 
     const getProducts = async () => {
         const response = await axios.get(productsUrl)
-            setProducts(response.data)
-    }
-
-    const deleteCategory = (id) => {
-        var hasCategory = false
-    
-        for(let i of products){
-            console.log(i)
-            if(i.category_code == id){
-                hasCategory = true
-            }
-        }
-    
-        if(hasCategory){
-            alert("Error: Can't delete category. A product requires it.")
-        }else{
-            axios.delete(url+'?id='+id)
-            window.location.reload()
-        }
-
-
-        //axios.delete(url+'?id='+id)
-        //window.location.reload()
+        setProducts(response.data)
+        
     }
 
     return (
@@ -86,13 +66,15 @@ function Categories() {
                             </tr>
                         </thead>
                         <tbody>
-                        {categories.map((cat,key) =>
-                            <tr key = {key}>
-                                <td>{cat.code}</td>
-                                <td>{cat.name}</td>
-                                <td>{cat.tax}%</td>
-                                <td><button onClick={() => deleteCategory(cat.code)}>Delete</button></td>
-                            </tr>
+                        {
+                        categories.map((cat,key) =>
+                            <CategoryList
+                                category={cat}
+                                key = {key}
+                                url = {url}
+                                products = {products}
+                                
+                            />
                             )}
                         </tbody>
                     </table>

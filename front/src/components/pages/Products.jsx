@@ -2,24 +2,24 @@ import styles from './Products.module.css'
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
+import ProductList from '../objs/ProductList'
 
 function Products() {
 
     const [product, setProduct] = useState({})
     const url ='http://localhost/routers/cadProduto.php'
     const categoryUrl = 'http://localhost/routers/cadCategoria.php'
+    
 
     const handleChange = (e) => {
         const name = e.target.name
         const value = e.target.value
         setProduct(values => ({...values, [name]: value}))
-        console.log(product)
     }
 
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.post(url,product)
-        console.log(product)
         window.location.reload()
     }
 
@@ -50,26 +50,6 @@ function Products() {
     const getItems = async () => {
         const response = await axios.get(itemUrl)
             setItems(response.data)
-    }
-
-    const deleteProduct= (id) => {
-        var hasProduct = false
-        for(let i of items){
-            if(i.product_code == id){
-                hasProduct = true
-            }
-        }
-        if(hasProduct){
-            alert("Error: Can't delete this product. A History item requires it.")
-        }else{
-            axios.delete(url+'?id='+id)
-            window.location.reload()
-        }
-        
-        
-        
-        //axios.delete(url+'?id='+id)
-        //window.location.reload()
     }
 
     const categoryNameGetter = (id) => {
@@ -115,15 +95,14 @@ function Products() {
                             </tr>
                         </thead>
                         <tbody>
-                        {products.map((prod,key) =>
-                            <tr key = {key}>
-                                <td>{prod.code}</td>
-                                <td>{prod.name}</td>
-                                <td>{prod.amount}</td>
-                                <td>${prod.price}</td>
-                                <td>{categoryNameGetter(prod.category_code)}</td>
-                                <td><button onClick={() => deleteProduct(prod.code)}>Delete</button></td>
-                            </tr>
+                        {products.map((prod, key) =>
+                            <ProductList 
+                                prod = {prod}
+                                key = {key}
+                                catName = {categoryNameGetter(prod.category_code)}
+                                items = {items}
+                                url = {url}
+                            />
                             )}
                         </tbody>
 
